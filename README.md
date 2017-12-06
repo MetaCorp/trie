@@ -4,6 +4,9 @@ Blazing fast 1kb search
 
 [![Build Status](https://travis-ci.org/kbrsh/wade.svg?branch=master)](https://travis-ci.org/kbrsh/wade)
 
+[https://jsperf.com/metacorp-trie-search](https://jsperf.com/metacorp-trie-search)
+[https://jsperf.com/metacorp-trie-init](https://jsperf.com/metacorp-trie-init)
+
 ### Installation
 
 NPM
