@@ -1,0 +1,39 @@
+{
+  "name": "trie",
+  "version": "0.0.1",
+  "description": "Blazing fast, 1kb search library",
+  "main": "dist/trie.min.js",
+  "scripts": {
+    "build": "gulp",
+    "test": "gulp test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MetaCorp/trie.git"
+  },
+  "keywords": [
+    "search",
+    "wade",
+    "fast",
+    "light"
+  ],
+  "author": "Kabir Shah",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/MetaCorp/trie/issues"
+  },
+  "homepage": "https://github.com/MetaCorp/trie#readme",
+  "devDependencies": {
+    "buble": "^0.16.0",
+    "chai": "^4.0.2",
+    "gulp": "^3.9.1",
+    "gulp-concat": "^2.6.1",
+    "gulp-header": "^1.8.9",
+    "gulp-include": "^2.3.1",
+    "gulp-mocha": "^4.3.1",
+    "gulp-replace": "^0.6.1",
+    "gulp-size": "^2.1.0",
+    "gulp-uglify": "^3.0.0",
+    "uglify-js": "^3.1.5"
+  }
+}
