@@ -31,19 +31,25 @@ function bTree(words) {
 }
 
 bTree.prototype.addWord = function (word) {
-  var prev = this.root
-  var j = 0
-  for(curr = prev; curr = curr[word.charAt(j)]; j++, prev = curr) {}
-  bNode(prev, word.substr(j), this.words.length)
+  const wordArray = word.toLowerCase().split(' ')
+  wordArray.forEach(word => {
+    var prev = this.root
+    var j = 0
+    for(curr = prev; curr = curr[word.charAt(j)]; j++, prev = curr) {}
+    bNode(prev, word.substr(j), this.words.length)
+  })
   this.words.push(word)
 }
 
 bTree.prototype.search = function (str) {
   const res = new Set()
-  var prev = this.root
-  var j = 0
-  for(curr = prev; curr = curr[str.charAt(j)]; j++, prev = curr) {}
-  j === str.length && run(prev, node => node.$ && node.$.forEach(i => res.add(this.words[i])))
+  const strArray = str.toLowerCase().split(' ')
+  strArray.forEach(str => {
+    var prev = this.root
+    var j = 0
+    for(curr = prev; curr = curr[str.charAt(j)]; j++, prev = curr) {}
+    j === str.length && run(prev, node => node.$ && node.$.forEach(i => res.add(this.words[i])))
+  })
   return Array.from(res)
 }
 
