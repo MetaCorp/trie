@@ -1,11 +1,15 @@
 # Wade
 
-Blazing fast 1kb search
+Blazing fast >1kb search
 
 [![Build Status](https://travis-ci.org/kbrsh/wade.svg?branch=master)](https://travis-ci.org/kbrsh/wade)
 
-[https://jsperf.com/metacorp-trie-search](https://jsperf.com/metacorp-trie-search)
-[https://jsperf.com/metacorp-trie-init](https://jsperf.com/metacorp-trie-init)
+This repo is heavily inspired from [Wade](https://github.com/kbrsh/wade)
+It's a simpler version of it without the ability to score the results, but is therefore significantly faster, and allow to add word after initialisation.
+
+Check jsperf here:
+- initialisation of the data structure: [metacorp-trie-init](https://jsperf.com/metacorp-trie-init)
+- searching: [metacorp-trie-search](https://jsperf.com/metacorp-trie-search)
 
 ### Installation
 
@@ -26,18 +30,27 @@ CDN
 Initialize Trie with an array of data.
 
 ```js
-const trie = new Trie(["Apple", "Lemon", "Orange", "Tomato"]);
+const trie = new Trie(['Apple', 'Lemon', 'Orange', 'Tomato'])
 ```
 
 Now you can search for a query within the data, and Trie will return results.
 
 ```js
-trie.search("App");
+trie.search('App')
+/*
+["Apple"]
+*/
+```
+
+Or add word to the data.
+
+```js
+trie.addWord('App')
 ```
 
 ### Processors
 
-Wade uses a set of processors to preprocess data and search queries. By default, these will:
+Trie uses a set of processors to preprocess data and search queries. By default, these will:
 
 * Make everything lowercase
 * Remove punctuation
@@ -49,12 +62,12 @@ You can easily modify the processors as they are available in `Wade.config.proce
 
 ```js
 // Don't preprocess at all
-Wade.config.processors = [];
+Trie.config.processors = []
 
 // Add custom processor to remove periods
-Wade.config.processors.push(function(str) {
-  return str.replace(/\./g, "");
-});
+Trie.config.processors.push(function(str) {
+  return str.replace(/\./g, '')
+})
 ```
 
 All functions will be executed in the order of the array (0-n) and they will be used on each document in the data.
@@ -62,19 +75,17 @@ All functions will be executed in the order of the array (0-n) and they will be 
 The stop words can be configured to include any words you like, and you can access the array of stop words by using:
 
 ```js
-Trie.config.stopWords = [/* array of stop words */];
+Trie.config.stopWords = [/* array of stop words */]
 ```
 
 The punctuation regular expression used to remove punctuation can be configured with:
 
 ```js
-Trie.config.punctuationRE = /[.!]/g; // should contain punctuation to remove
+Trie.config.punctuationRE = /[.!]/g // should contain punctuation to remove
 ```
-
-### Support
-
-Support Wade [on Patreon](https://patreon.com/kbrsh) to help sustain the development of the project. The maker of the project works on open source for free. If you or your company depend on this project, then it makes sense to donate to ensure that the project is maintained.
 
 ### License
 
-Licensed under the [MIT License](https://kbrsh.github.io/license) by [Kabir Shah](https://kabir.ml)
+Licensed under the [MIT License](https://github.com/MetaCorp/trie/blob/master/LICENSE)
+
+Copyright (c) Meta l.szabatura@gmail.com
