@@ -12,59 +12,28 @@ Blazing fast 1kb search
 NPM
 
 ```sh
-npm install wade
+npm install @metacorp/trie
 ```
 
 CDN
 
 ```html
-<script src="https://unpkg.com/wade"></script>
+<script src="https://unpkg.com/@metacorp/trie"></script>
 ```
 
 ### Usage
 
-Initialize Wade with an array of data.
+Initialize Trie with an array of data.
 
 ```js
-const search = Wade(["Apple", "Lemon", "Orange", "Tomato"]);
+const trie = new Trie(["Apple", "Lemon", "Orange", "Tomato"]);
 ```
 
-Now you can search for a query within the data, and Wade will return results. Each result will include the index of the item in the data it corresponds to along with a score depending on the relevance of the query to the result.
+Now you can search for a query within the data, and Trie will return results.
 
 ```js
-search("App");
-/*
-[{
-  index: 0,
-  score: 1.25
-}]
-*/
+trie.search("App");
 ```
-
-Combined with libraries like [Moon](http://moonjs.ga), you can create a [real-time search](http://moonjs.ga/examples/search/index.html).
-
-### Loading/Saving Data
-
-To save data as an object, use `Wade.save` on your search function, and then use these later when initializing Wade.
-
-For example:
-
-```js
-// Create the initial search function
-const search = Wade(["Apple", "Lemon", "Orange", "Tomato"]);
-const instance = Wade.save(search);
-
-// Save `instance`
-```
-
-Later, you can get the same search function without having Wade recreate an index every time by doing:
-
-```js
-// Retrieve `instance`, then
-const search = Wade(instance);
-```
-
-`instance` can be saved to a file using using `JSON.stringify()` and loaded with `JSON.parse()`.
 
 ### Processors
 
@@ -93,25 +62,14 @@ All functions will be executed in the order of the array (0-n) and they will be 
 The stop words can be configured to include any words you like, and you can access the array of stop words by using:
 
 ```js
-Wade.config.stopWords = [/* array of stop words */];
+Trie.config.stopWords = [/* array of stop words */];
 ```
 
 The punctuation regular expression used to remove punctuation can be configured with:
 
 ```js
-Wade.config.punctuationRE = /[.!]/g; // should contain punctuation to remove
+Trie.config.punctuationRE = /[.!]/g; // should contain punctuation to remove
 ```
-
-### Algorithm
-
-First, an index is generated from the data. When performing a search, the following happens:
-
-* The search query is processed.
-* The search query is tokenized into terms.
-* Each term except the last is searched for exactly and scores for each item in the data are updated according to the relevance of the term to the data.
-* The last keyword is treated as a prefix, and Wade performs a depth-first search and updates the score for all data prefixed with this term using the relevance weight for the term. This allows for searching as a user types.
-
-In-depth explanations of the algorithm are available on the [blog post](https://blog.kabir.ml/posts/inside-wade.html) and [pdf](https://github.com/kbrsh/wade/blob/master/Wade.pdf).
 
 ### Support
 

@@ -75,8 +75,8 @@ bTree.prototype.search = function (str) {
   return Array.from(ret)
 }
 
-const Trie = bTree
+const Trie1 = bTree
 
-Trie.config = config
+Trie1.config = config
 
-Trie.version = "__VERSION__"
+Trie1.version = "__VERSION__"

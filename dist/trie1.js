@@ -8,7 +8,7 @@
 (function(root, factory) {
   /* ======= Global Wade ======= */
   if(typeof module === "undefined") {
-    root.Trie = factory();
+    root.Trie1 = factory();
   } else {
     module.exports = factory();
   }
@@ -18,59 +18,87 @@
     var config = {
     }
     
-    function bNode(root, word, index) {
-      var curr = root
-      for(var i = 0, c = null; c = word.charAt(i); i++, prev = curr, curr = curr[c]) {
-        curr[c] = {}
+    function bNode(word, index) {
+      if (!word || !word.length) {
+        this.value = null
+        this.children = []
+      } else {
+        this.value = word[0]
+        if (word.length === 1) {
+          this.addIndex(index)
+          this.children = []
+        } else
+          { this.children = [new bNode(word.substr(1), index)] }
       }
-      if (!curr.$)
-        { curr.$ = [index] }
-      else
-        { curr.$.push(index) }
-      return root
     }
     
-    function run(node, cb) {
-      for(var k in node) {
-        cb(node)
-        k !== '$' && run(node[k], cb)
-      }
+    bNode.prototype.getChild = function (val) {
+      if (val === undefined) { return }
+      var ret = this.children.filter(function (n) { return n.value === val; })
+      return ret.length ? ret[0] : undefined
+    }
+    
+    bNode.prototype.addChild = function (node) {
+      this.children.push(node)
+    }
+    
+    bNode.prototype.addIndex = function (index) {
+      if (this.indexes)
+        { this.indexes.push(index) }
+      else
+        { this.indexes = [index] }
+    }
+    
+    bNode.prototype.run = function (cb) {
+      cb(this)
+      this.children.forEach(function (node) { return node.run(cb); })
     }
     
     function bTree(words) {
       var this$1 = this;
     
       this.words = []
-      this.root = {}
-      for(var i = 0; i < words.length; i++) {
-        this$1.addWord(words[i])
-      }
+      this.root = new bNode()
+      words && words.forEach(function (word) { return this$1.addWord(word); })
     }
     
     bTree.prototype.addWord = function (word) {
-      var prev = this.root
-      var j = 0
-      for(curr = prev; curr = curr[word.charAt(j)]; j++, prev = curr) {}
-      bNode(prev, word.substr(j), this.words.length)
+      if (!word || !word.length) { return }
+      var index = this.words.length
       this.words.push(word)
+      var prev = this.root,
+        i = 0;
+      var wordArray = word.toLowerCase().split(' ')
+      wordArray.forEach(function (word) {
+        for (var node = prev; node = node.getChild(word.charAt(i)); i++, prev = node) {}
+        if (i >= word.length)
+          { prev.addIndex(index) }
+        else
+          { prev.addChild(new bNode(word.substr(i), index)) }
+      })
     }
     
     bTree.prototype.search = function (str) {
       var this$1 = this;
     
-      var res = new Set()
-      var prev = this.root
-      var j = 0
-      for(curr = prev; curr = curr[str.charAt(j)]; j++, prev = curr) {}
-      j === str.length && run(prev, function (node) { return node.$ && node.$.forEach(function (i) { return res.add(this$1.words[i]); }); })
-      return Array.from(res)
+      var ret = new Set()
+      var strArray = str.toLowerCase().split(' ')
+      strArray.forEach(function (str) {
+        var prev = this$1.root,
+          i = 0;
+        for (var node = prev; node = node.getChild(str.charAt(i)); i++, prev = node) {}
+        i === str.length &&
+          prev.run(function (node) { return node.indexes &&
+            node.indexes.forEach(function (index) { return ret.add(this$1.words[index]); }); })
+      })
+      return Array.from(ret)
     }
     
-    var Trie = bTree
+    var Trie1 = bTree
     
-    Trie.config = config
+    Trie1.config = config
     
-    Trie.version = "0.0.7"
+    Trie1.version = "0.0.7"
     
-    return Trie;
+    return Trie1;
 }));

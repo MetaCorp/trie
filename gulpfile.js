@@ -45,34 +45,36 @@ const gulpBuble = function(options) {
   });
 };
 
+const bubleConfig = {
+  namedFunctionExpressions: false,
+  transforms: {
+    arrow: true,
+    classes: false,
+    collections: false,
+    computedProperty: false,
+    conciseMethodProperty: false,
+    constLoop: false,
+    dangerousForOf: false,
+    dangerousTaggedTemplateString: false,
+    defaultParameter: false,
+    destructuring: false,
+    forOf: false,
+    generator: false,
+    letConst: true,
+    modules: false,
+    numericLiteral: false,
+    parameterDestructuring: false,
+    reservedProperties: false,
+    spreadRest: false,
+    stickyRegExp: false,
+    templateString: true,
+    unicodeRegExp: false
+  }
+}
+
 gulp.task("transpile", function() {
-  return gulp.src(["./src/*.js", "!./src/wrapper.js"])
-    .pipe(gulpBuble({
-      namedFunctionExpressions: false,
-      transforms: {
-        arrow: true,
-        classes: false,
-        collections: false,
-        computedProperty: false,
-        conciseMethodProperty: false,
-        constLoop: false,
-        dangerousForOf: false,
-        dangerousTaggedTemplateString: false,
-        defaultParameter: false,
-        destructuring: false,
-        forOf: false,
-        generator: false,
-        letConst: true,
-        modules: false,
-        numericLiteral: false,
-        parameterDestructuring: false,
-        reservedProperties: false,
-        spreadRest: false,
-        stickyRegExp: false,
-        templateString: true,
-        unicodeRegExp: false
-      }
-    }))
+  return gulp.src(["./src/trie.js"])
+    .pipe(gulpBuble(bubleConfig))
     // .pipe(concat("trie.js"))
     .pipe(gulp.dest("./dist/"));
 });
@@ -99,9 +101,15 @@ gulp.task("minify", ["build"], function() {
     .pipe(gulp.dest("./dist/"));
 });
 
+gulp.task("transpile1", function () {
+  return gulp.src(["./src/trie1.js"])
+    .pipe(gulpBuble(bubleConfig))
+    // .pipe(concat("trie.js"))
+    .pipe(gulp.dest("./dist/"));
+});
 
-gulp.task("build1", ["transpile"], function() {
-  return gulp.src(["./src/wrapper.js"])
+gulp.task("build1", ["transpile1"], function() {
+  return gulp.src(["./src/wrapper1.js"])
     .pipe(include())
     .pipe(concat("trie1.js"))
     .pipe(header(comment + '\n'))
@@ -129,4 +137,4 @@ gulp.task("test", function() {
 });
 
 // Default task
-gulp.task("default", ["transpile", "build", "minify", "build1", "minify1"]);
+gulp.task("default", ["build", "minify", "build1", "minify1"]);
