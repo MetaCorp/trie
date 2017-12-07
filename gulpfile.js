@@ -46,7 +46,7 @@ const gulpBuble = function(options) {
 };
 
 gulp.task("transpile", function() {
-  return gulp.src(["./src/index.js"])
+  return gulp.src(["./src/*.js", "!./src/wrapper.js"])
     .pipe(gulpBuble({
       namedFunctionExpressions: false,
       transforms: {
@@ -73,7 +73,7 @@ gulp.task("transpile", function() {
         unicodeRegExp: false
       }
     }))
-    .pipe(concat("trie.js"))
+    // .pipe(concat("trie.js"))
     .pipe(gulp.dest("./dist/"));
 });
 
@@ -100,10 +100,33 @@ gulp.task("minify", ["build"], function() {
 });
 
 
+gulp.task("build1", ["transpile"], function() {
+  return gulp.src(["./src/wrapper.js"])
+    .pipe(include())
+    .pipe(concat("trie1.js"))
+    .pipe(header(comment + '\n'))
+    .pipe(replace("__VERSION__", pkg.version))
+    .pipe(size())
+    .pipe(gulp.dest("./dist/"));
+});
+
+gulp.task("minify1", ["build1"], function() {
+  return gulp.src(["./dist/trie1.js"])
+    .pipe(uglify())
+    .pipe(header(comment))
+    .pipe(size())
+    .pipe(size({
+      gzip: true
+    }))
+    .pipe(concat("trie1.min.js"))
+    .pipe(gulp.dest("./dist/"));
+});
+
+
 gulp.task("test", function() {
   gulp.src("./test/**/*.js")
   		.pipe(mocha({reporter: "spec"}))
 });
 
 // Default task
-gulp.task("default", ["build", "minify"]);
+gulp.task("default", ["transpile", "build", "minify", "build1", "minify1"]);
