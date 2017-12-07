@@ -52,26 +52,28 @@ bTree.prototype.addWord = function (word) {
   var prev = this.root,
     i = 0;
   const wordArray = word.toLowerCase().split(' ')
-  wordArray.forEach(word => {
+  for (var i = 0, l = wordArray.length; i < l; i++) {
+    const word = wordArray[i]
     for (var node = prev; node = node.getChild(word.charAt(i)); i++, prev = node) {}
     if (i >= word.length)
       prev.addIndex(index)
     else
       prev.addChild(new bNode(word.substr(i), index))
-  })
+  }
 }
 
 bTree.prototype.search = function (str) {
   const ret = new Set()
   const strArray = str.toLowerCase().split(' ')
-  strArray.forEach(str => {
+  for (var i = 0, l = strArray.length; i < l; i++) {
+    const str = strArray[i]
     var prev = this.root,
       i = 0;
     for (var node = prev; node = node.getChild(str.charAt(i)); i++, prev = node) {}
     i === str.length &&
       prev.run(node => node.indexes &&
         node.indexes.forEach(index => ret.add(this.words[index])))
-  })
+  }
   return Array.from(ret)
 }
 

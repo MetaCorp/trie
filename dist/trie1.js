@@ -1,5 +1,5 @@
 /**
- * Trie v0.0.8
+ * Trie v0.0.9
  * Copyright 2017 Léopold Szabatura
  * Released under the MIT License
  * https://github.com/MetaCorp/trie
@@ -69,13 +69,14 @@
       var prev = this.root,
         i = 0;
       var wordArray = word.toLowerCase().split(' ')
-      wordArray.forEach(function (word) {
-        for (var node = prev; node = node.getChild(word.charAt(i)); i++, prev = node) {}
-        if (i >= word.length)
+      for (var i = 0, l = wordArray.length; i < l; i++) {
+        var word$1 = wordArray[i]
+        for (var node = prev; node = node.getChild(word$1.charAt(i)); i++, prev = node) {}
+        if (i >= word$1.length)
           { prev.addIndex(index) }
         else
-          { prev.addChild(new bNode(word.substr(i), index)) }
-      })
+          { prev.addChild(new bNode(word$1.substr(i), index)) }
+      }
     }
     
     bTree.prototype.search = function (str) {
@@ -83,14 +84,15 @@
     
       var ret = new Set()
       var strArray = str.toLowerCase().split(' ')
-      strArray.forEach(function (str) {
+      for (var i = 0, l = strArray.length; i < l; i++) {
+        var str$1 = strArray[i]
         var prev = this$1.root,
           i = 0;
-        for (var node = prev; node = node.getChild(str.charAt(i)); i++, prev = node) {}
-        i === str.length &&
+        for (var node = prev; node = node.getChild(str$1.charAt(i)); i++, prev = node) {}
+        i === str$1.length &&
           prev.run(function (node) { return node.indexes &&
             node.indexes.forEach(function (index) { return ret.add(this$1.words[index]); }); })
-      })
+      }
       return Array.from(ret)
     }
     
@@ -98,7 +100,7 @@
     
     Trie1.config = config
     
-    Trie1.version = "0.0.8"
+    Trie1.version = "0.0.9"
     
     return Trie1;
 }));
