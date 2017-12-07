@@ -16,40 +16,44 @@ function bNode(root, word, index) {
 }
 
 function run(node, cb) {
-  for(var k in node) {
+  const keys = Object.keys(node)
+
+  for (var i = 0, l = keys.length; i < l; i++) {
     cb(node)
-    k !== '$' && run(node[k], cb)
+    keys[i] !== '$' && run(node[keys[i]], cb)
   }
 }
 
 function bTree(words) {
   this.words = []
   this.root = {}
-  for(var i = 0; i < words.length; i++) {
+  for(var i = 0, l = words.length; i < l; i++) {
     this.addWord(words[i])
   }
 }
 
 bTree.prototype.addWord = function (word) {
   const wordArray = word.toLowerCase().split(' ')
-  wordArray.forEach(word => {
+  for (var i = 0, l = wordArray.length; i < l; i++) {
+    const word = wordArray[i]
     var prev = this.root
     var j = 0
     for(curr = prev; curr = curr[word.charAt(j)]; j++, prev = curr) {}
     bNode(prev, word.substr(j), this.words.length)
-  })
+  }
   this.words.push(word)
 }
 
 bTree.prototype.search = function (str) {
   const res = new Set()
   const strArray = str.toLowerCase().split(' ')
-  strArray.forEach(str => {
+  for (var i = 0, l = strArray.length; i < l; i++) {
+    const str = strArray[i]
     var prev = this.root
     var j = 0
     for(curr = prev; curr = curr[str.charAt(j)]; j++, prev = curr) {}
     j === str.length && run(prev, node => node.$ && node.$.forEach(i => res.add(this.words[i])))
-  })
+  }
   return Array.from(res)
 }
 
