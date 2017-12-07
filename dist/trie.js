@@ -1,5 +1,5 @@
 /**
- * Trie v0.0.6
+ * Trie v0.0.7
  * Copyright 2017 Léopold Szabatura
  * Released under the MIT License
  * https://github.com/MetaCorp/trie
@@ -18,7 +18,7 @@
     var config = {
     }
     
-    function tNode(root, word, index) {
+    function bNode(root, word, index) {
       var curr = root
       for(var i = 0, c = null; c = word.charAt(i); i++, prev = curr, curr = curr[c]) {
         curr[c] = {}
@@ -37,7 +37,7 @@
       }
     }
     
-    function tTree(words) {
+    function bTree(words) {
       var this$1 = this;
     
       this.words = []
@@ -47,15 +47,15 @@
       }
     }
     
-    tTree.prototype.addWord = function (word) {
+    bTree.prototype.addWord = function (word) {
       var prev = this.root
       var j = 0
       for(curr = prev; curr = curr[word.charAt(j)]; j++, prev = curr) {}
-      tNode(prev, word.substr(j), this.words.length)
+      bNode(prev, word.substr(j), this.words.length)
       this.words.push(word)
     }
     
-    tTree.prototype.search = function (str) {
+    bTree.prototype.search = function (str) {
       var this$1 = this;
     
       var res = new Set()
@@ -70,7 +70,7 @@
     
     Trie.config = config
     
-    Trie.version = "0.0.6"
+    Trie.version = "0.0.7"
     
     return Trie;
 }));
