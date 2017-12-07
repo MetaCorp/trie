@@ -1,6 +1,6 @@
 {
   "name": "@metacorp/trie",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "Blazing fast, 1kb search library",
   "main": "dist/trie.min.js",
   "scripts": {
@@ -13,11 +13,11 @@
   },
   "keywords": [
     "search",
-    "wade",
+    "trie",
     "fast",
     "light"
   ],
-  "author": "Kabir Shah",
+  "author": "Léopold Szabatura",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/MetaCorp/trie/issues"

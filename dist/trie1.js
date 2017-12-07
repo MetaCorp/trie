@@ -1,5 +1,5 @@
 /**
- * Trie v0.0.7
+ * Trie v0.0.8
  * Copyright 2017 Léopold Szabatura
  * Released under the MIT License
  * https://github.com/MetaCorp/trie
@@ -98,7 +98,7 @@
     
     Trie1.config = config
     
-    Trie1.version = "0.0.7"
+    Trie1.version = "0.0.8"
     
     return Trie1;
 }));
