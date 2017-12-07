@@ -46,10 +46,6 @@ trie.addWord('App')
 This repo is heavily inspired from [Wade](https://github.com/kbrsh/wade).
 It's a simpler version of it without the ability to score the results, but is therefore significantly faster, and allow to add word after initialisation.
 
-Check jsperf here:
-- initialisation of the data structure: [metacorp-trie-init](https://jsperf.com/metacorp-trie-init)
-- searching: [metacorp-trie-search](https://jsperf.com/metacorp-trie-search)
-
 Trie comes in two implementations of [prefix tree](https://en.wikipedia.org/wiki/Trie).
 
 Version 1:
@@ -61,6 +57,12 @@ Version 2:
 - bundle size: 1.94kb(min) - 831b(gzip)
 - init speed: 3.07 Ops/sec
 - search speed: 94,000 Ops/sec
+
+Check jsperf here:
+- [init](https://jsperf.com/metacorp-trie-init)
+- [searching](https://jsperf.com/metacorp-trie-search)
+
+And bundle size: [here](https://bundlephobia.com/result?p=@metacorp/trie)
 
 ### Processors
 
