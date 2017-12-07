@@ -1,15 +1,8 @@
-# Wade
+# Trie
 
-Blazing fast >1kb search
+Blazing fast <1kb search
 
-[![Build Status](https://travis-ci.org/kbrsh/wade.svg?branch=master)](https://travis-ci.org/kbrsh/wade)
-
-This repo is heavily inspired from [Wade](https://github.com/kbrsh/wade)
-It's a simpler version of it without the ability to score the results, but is therefore significantly faster, and allow to add word after initialisation.
-
-Check jsperf here:
-- initialisation of the data structure: [metacorp-trie-init](https://jsperf.com/metacorp-trie-init)
-- searching: [metacorp-trie-search](https://jsperf.com/metacorp-trie-search)
+[![Build Status](https://travis-ci.org/MetaCorp/trie.svg?branch=master)](https://travis-ci.org/MetaCorp/trie)
 
 ### Installation
 
@@ -48,6 +41,27 @@ Or add word to the data.
 trie.addWord('App')
 ```
 
+### About
+
+This repo is heavily inspired from [Wade](https://github.com/kbrsh/wade).
+It's a simpler version of it without the ability to score the results, but is therefore significantly faster, and allow to add word after initialisation.
+
+Check jsperf here:
+- initialisation of the data structure: [metacorp-trie-init](https://jsperf.com/metacorp-trie-init)
+- searching: [metacorp-trie-search](https://jsperf.com/metacorp-trie-search)
+
+Trie comes in two implementations of [prefix tree](https://en.wikipedia.org/wiki/Trie).
+
+Version 1:
+- bundle size: 1.55kb(min) - 757b(gzip)
+- init speed: 12.24 Ops/sec
+- search speed: 79,000 Ops/sec
+
+Version 2:
+- bundle size: 1.94kb(min) - 831b(gzip)
+- init speed: 3.07 Ops/sec
+- search speed: 94,000 Ops/sec
+
 ### Processors
 
 Trie uses a set of processors to preprocess data and search queries. By default, these will:
@@ -58,7 +72,7 @@ Trie uses a set of processors to preprocess data and search queries. By default,
 
 A process consists of different functions that process a string and modify it in some way, and return the transformed string.
 
-You can easily modify the processors as they are available in `Wade.config.processors`, for example:
+You can easily modify the processors as they are available in `Trie.config.processors`, for example:
 
 ```js
 // Don't preprocess at all
