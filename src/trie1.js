@@ -1,6 +1,43 @@
-const whitespaceRE = /\s+/g;
+const whitespaceRE = /\s+/g
 
 const config = {
+  stopWords: [],
+  punctuationRE: /[!"',.:;?]/g,
+  processors: [
+    function (entry) {
+      return entry.toLowerCase()
+    },
+    function (entry) {
+      return entry.replace(config.punctuationRE, '')
+    },
+    function (entry) {
+      const stopWords = config.stopWords
+      const terms = getTerms(entry)
+      var i = terms.length
+
+      while ((i--) !== 0)
+        if (stopWords.indexOf(terms[i]) !== -1)
+          terms.splice(i, 1)
+
+      return terms.join(' ')
+    }
+  ]
+}
+
+const getTerms = function (entry) {
+  if (!entry || !entry.length) return []
+  const terms = entry.split(whitespaceRE)
+  if (terms[0].length === 0) terms.shift()
+  if (terms[terms.length - 1].length === 0) terms.pop()
+  return terms
+}
+
+const processEntry = function (entry) {
+  if (entry.length) {
+    for (let i = 0, l = config.processors.length; i < l; i++)
+      entry = config.processors[i](entry)
+  }
+  return getTerms(entry)
 }
 
 function bNode(word, index) {
@@ -46,12 +83,11 @@ function bTree(words) {
 }
 
 bTree.prototype.addWord = function (word) {
-  if (!word || !word.length) return
+  const wordArray = processEntry(word)
+  if (!wordArray.length) return
   const index = this.words.length
-  this.words.push(word)
   var prev = this.root,
     i = 0;
-  const wordArray = word.toLowerCase().split(' ')
   for (var i = 0, l = wordArray.length; i < l; i++) {
     const word = wordArray[i]
     for (var node = prev; node = node.getChild(word.charAt(i)); i++, prev = node) {}
@@ -60,11 +96,13 @@ bTree.prototype.addWord = function (word) {
     else
       prev.addChild(new bNode(word.substr(i), index))
   }
+  this.words.push(word)
 }
 
 bTree.prototype.search = function (str) {
+  const strArray = processEntry(str)
+  if (!strArray.length) return []
   const ret = new Set()
-  const strArray = str.toLowerCase().split(' ')
   for (var i = 0, l = strArray.length; i < l; i++) {
     const str = strArray[i]
     var prev = this.root,

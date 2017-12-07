@@ -1,5 +1,5 @@
 /**
- * Trie v0.0.10
+ * Trie v0.1.0
  * Copyright 2017 Léopold Szabatura
  * Released under the MIT License
  * https://github.com/MetaCorp/trie
@@ -13,9 +13,46 @@
     module.exports = factory();
   }
 }(this, function() {
-    var whitespaceRE = /\s+/g;
+    var whitespaceRE = /\s+/g
     
     var config = {
+      stopWords: [],
+      punctuationRE: /[!"',.:;?]/g,
+      processors: [
+        function (entry) {
+          return entry.toLowerCase()
+        },
+        function (entry) {
+          return entry.replace(config.punctuationRE, '')
+        },
+        function (entry) {
+          var stopWords = config.stopWords
+          var terms = getTerms(entry)
+          var i = terms.length
+    
+          while ((i--) !== 0)
+            { if (stopWords.indexOf(terms[i]) !== -1)
+              { terms.splice(i, 1) } }
+    
+          return terms.join(' ')
+        }
+      ]
+    }
+    
+    var getTerms = function (entry) {
+      if (!entry || !entry.length) { return [] }
+      var terms = entry.split(whitespaceRE)
+      if (terms[0].length === 0) { terms.shift() }
+      if (terms[terms.length - 1].length === 0) { terms.pop() }
+      return terms
+    }
+    
+    var processEntry = function (entry) {
+      if (entry.length) {
+        for (var i = 0, l = config.processors.length; i < l; i++)
+          { entry = config.processors[i](entry) }
+      }
+      return getTerms(entry)
     }
     
     function bNode(word, index) {
@@ -63,12 +100,11 @@
     }
     
     bTree.prototype.addWord = function (word) {
-      if (!word || !word.length) { return }
+      var wordArray = processEntry(word)
+      if (!wordArray.length) { return }
       var index = this.words.length
-      this.words.push(word)
       var prev = this.root,
         i = 0;
-      var wordArray = word.toLowerCase().split(' ')
       for (var i = 0, l = wordArray.length; i < l; i++) {
         var word$1 = wordArray[i]
         for (var node = prev; node = node.getChild(word$1.charAt(i)); i++, prev = node) {}
@@ -77,13 +113,15 @@
         else
           { prev.addChild(new bNode(word$1.substr(i), index)) }
       }
+      this.words.push(word)
     }
     
     bTree.prototype.search = function (str) {
       var this$1 = this;
     
+      var strArray = processEntry(str)
+      if (!strArray.length) { return [] }
       var ret = new Set()
-      var strArray = str.toLowerCase().split(' ')
       for (var i = 0, l = strArray.length; i < l; i++) {
         var str$1 = strArray[i]
         var prev = this$1.root,
@@ -100,7 +138,7 @@
     
     Trie1.config = config
     
-    Trie1.version = "0.0.10"
+    Trie1.version = "0.1.0"
     
     return Trie1;
 }));
