@@ -42,7 +42,7 @@ const processEntry = function (entry) {
 
 function bNode(root, word, index) {
   var curr = root
-  for(var i = 0, c = null; c = word.charAt(i); i++, prev = curr, curr = curr[c]) {
+  for (var i = 0, c = null; c = word.charAt(i); i++, prev = curr, curr = curr[c]) {
     curr[c] = {}
   }
   if (!curr.$)
@@ -53,18 +53,14 @@ function bNode(root, word, index) {
 }
 
 function run(node, cb) {
-  const keys = Object.keys(node)
-
-  for (var i = 0, l = keys.length; i < l; i++) {
-    cb(node)
-    keys[i] !== '$' && run(node[keys[i]], cb)
-  }
+  for (var i = 0, keys = Object.keys(node); key = keys[i]; i++)
+    key !== '$' ? run(node[key], cb) : cb(node.$)
 }
 
 function bTree(words) {
   this.words = []
   this.root = {}
-  for(var i = 0, l = words.length; i < l; i++) {
+  for (var i = 0, l = words.length; i < l; i++) {
     this.addWord(words[i])
   }
 }
@@ -76,13 +72,44 @@ bTree.prototype.addWord = function (word) {
     const word = wordArray[i]
     var prev = this.root
     var j = 0
-    for(curr = prev; curr = curr[word.charAt(j)]; j++, prev = curr) {}
+    for (curr = prev; curr = curr[word.charAt(j)]; j++, prev = curr) {}
     bNode(prev, word.substr(j), this.words.length)
   }
   this.words.push(word)
 }
 
-bTree.prototype.search = function (str) {
+bTree.prototype.search = function (str) {// Missing first word
+  const strArray = processEntry(str)
+  const l = strArray.length
+  if (!l) return []
+  const res = new Set()
+  const addSet = $ => {
+    for (var i = 0, l = $.length; i < l; i++) {
+      res.add(this.words[$[i]])
+    }
+  }
+  for (var i = 0; i < l; i++) {
+    const str = strArray[i]
+    var prev = this.root
+    var j = 0
+    for (curr = prev; curr = curr[str.charAt(j)]; j++, prev = curr) {}
+    j === str.length && run(prev, addSet)
+  }
+  return Array.from(res)
+}
+
+function run2(node) {
+  if (!node.$s) {
+    var set = new Set()// DOUBLON ? => SET
+    for (var i = 0, keys = Object.keys(node); key = keys[i]; i++) {
+      (key !== '$' ? run2(node[key]) : node.$).forEach(e => set.add(e))
+    }
+    node.$s = Array.from(set)
+  }
+  return node.$s
+}
+
+bTree.prototype.search2 = function (str) {
   const strArray = processEntry(str)
   if (!strArray.length) return []
   const res = new Set()
@@ -90,10 +117,13 @@ bTree.prototype.search = function (str) {
     const str = strArray[i]
     var prev = this.root
     var j = 0
-    for(curr = prev; curr = curr[str.charAt(j)]; j++, prev = curr) {}
-    j === str.length && run(prev, node => node.$ && node.$.forEach(i => res.add(this.words[i])))
+    for (curr = prev; curr = curr[str.charAt(j)]; j++ , prev = curr) { }
+    j === str.length && run2(prev).forEach(i => res.add(this.words[i]))
   }
   return Array.from(res)
+}
+
+bTree.prototype.save = function () {
 }
 
 const Trie = bTree

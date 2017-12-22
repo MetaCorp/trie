@@ -31,14 +31,14 @@ Now you can search for a query within the data, and Trie will return results.
 ```js
 trie.search('App')
 /*
-["Apple"]
+['Apple']
 */
 ```
 
 Or add word to the data.
 
 ```js
-trie.addWord('App')
+trie.addWord('Kiwi')
 ```
 
 ### About
@@ -60,7 +60,7 @@ Version 2:
 
 Check jsperf here:
 - [init](https://jsperf.com/metacorp-trie-init)
-- [searching](https://jsperf.com/metacorp-trie-search)
+- [search](https://jsperf.com/metacorp-trie-search)
 
 And bundle size: [here](https://bundlephobia.com/result?p=@metacorp/trie)
 
